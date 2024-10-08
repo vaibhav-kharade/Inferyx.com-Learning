@@ -1,0 +1,64 @@
+package com.inferyx.shopcrudsql.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import com.inferyx.shopcrudsql.model.Employee;
+import com.inferyx.shopcrudsql.service.EmployeeService;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/employees")
+public class EmployeeController {
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    // Display All Employees (UI)
+    @GetMapping
+    public String getAllEmployees(Model model) {
+        List<Employee> employees = employeeService.getAllEmployees();
+        model.addAttribute("employees", employees);
+        return "employee-list";  // Thymeleaf template
+    }
+
+    // Add New Employee (UI)
+    @GetMapping("/new")
+    public String showAddEmployeeForm(Model model) {
+        model.addAttribute("employee", new Employee());
+        return "employee-form";  // Thymeleaf template
+    }
+
+    // Save New Employee (UI)
+    @PostMapping
+    public String createEmployee(@ModelAttribute Employee employee) {
+        employeeService.createEmployee(employee);
+        return "redirect:/employees";  // Redirect to employee list
+    }
+
+    // Show Employee Edit Form (UI)
+    @GetMapping("/edit/{id}")
+    public String showUpdateEmployeeForm(@PathVariable Long id, Model model) {
+        Employee employee = employeeService.getEmployeeById(id).orElseThrow(() -> new IllegalArgumentException("Invalid employee Id:" + id));
+        model.addAttribute("employee", employee);
+        return "employee-form";
+    }
+
+    // Update Employee (UI)
+    @PostMapping("/update/{id}")
+    public String updateEmployee(@PathVariable Long id, @ModelAttribute Employee employee) {
+        employee.setId(id);
+        employeeService.updateEmployee(employee);
+        return "redirect:/employees";
+    }
+
+    // Delete Employee (UI)
+    @GetMapping("/delete/{id}")
+    public String deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return "redirect:/employees";
+    }
+}

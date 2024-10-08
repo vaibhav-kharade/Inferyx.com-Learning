@@ -1,0 +1,5 @@
+package com.inferyx.shopcrudsql.model;
+
+public class Employee {
+
+}

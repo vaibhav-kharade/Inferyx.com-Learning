@@ -1,0 +1,5 @@
+package com.inferyx.shopcrudsql.controller;
+
+public class EmployeeController {
+
+}

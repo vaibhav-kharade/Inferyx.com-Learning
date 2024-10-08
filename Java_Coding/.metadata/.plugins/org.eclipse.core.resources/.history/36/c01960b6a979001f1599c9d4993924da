@@ -1,0 +1,5 @@
+package com.inferyx.shopcrudsql.service;
+
+public interface EmployeeRepository {
+
+}
